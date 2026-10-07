@@ -1,0 +1,32 @@
+services:
+  aegis-capture:
+    image: registry.0byt.es/aegis-capture:latest
+    container_name: aegis-capture
+    restart: always
+    environment:
+      - TZ=Etc/UTC
+    # Chromium's own sandbox needs user namespaces, which Docker's default seccomp blocks. 
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  aegis-node:
+    image: registry.0byt.es/aegis-node:latest
+    container_name: aegis-node
+    restart: always
+    network_mode: host
+    environment:
+      - TZ=Etc/UTC
+    volumes:
+      - ./config.yml:/config/config.yml:ro
+      - ./data:/data
+    depends_on:
+      aegis-capture:
+        condition: service_healthy

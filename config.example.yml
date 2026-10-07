@@ -1,0 +1,46 @@
+---
+# Aegis node agent configuration. Copy to config.yml and mount at /config.
+# The agent reads this file via -c/--config (default /config/config.yml); it
+# reads no environment variables.
+
+node_id: node-01
+data_dir: /data
+core_url: https://aegis.example.com
+# API key this node uses to authenticate to core (X-Api-Key).
+core_api_key:
+# Log verbosity: trace / debug / info / warn / error.
+log_level: info
+# Seconds between task polls (also the heartbeat interval).
+poll_secs: 60
+# SEC-002: never default to skipping TLS verification. Set true only for dev.
+tls_skip_verify: false
+# Max bytes per upload chunk. Keep under any proxy body-size limit (25 MiB).
+chunk_bytes: 26214400
+
+# Optional: reach core through a proxy. If proxy_type is unset/empty, no proxy
+# is used. One of: http | https | socks5 | socks5h. SOCKS credentials are sent
+# in the proxy connection; HTTP(S) use a Proxy-Authorization header.
+# proxy_type: socks5h
+# proxy_host: 127.0.0.1
+# proxy_port: 1080
+# proxy_username:
+# proxy_password:
+
+# Optional: reach core without a DNS lookup. Connect to this IP while keeping
+# core_url's hostname for SNI, Host and certificate verification. IP only; the
+# port comes from core_url. core_url's host must be a name, not an IP.
+# core_address: 10.0.0.5
+
+# Commands the agent is allowed to run (prefix match). Anything not listed is
+# refused before execution. Helpers are separate binaries, e.g. aegis-shodan.
+permitted_tasks:
+  - aegis-nessus
+  - aegis-qualys
+  - aegis-qualys-agents
+  - aegis-screenshot
+  - aegis-shodan
+  - bbot
+  - nikto
+  - nmap
+  - nuclei
+  - testssl
