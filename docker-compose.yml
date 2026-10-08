@@ -25,8 +25,8 @@ services:
     environment:
       - TZ=Etc/UTC
     volumes:
-      - ./config.yml:/config/config.yml:ro
-      - ./data:/data
+      - ./config-node:/config:ro
+      - ./data-node:/data
     depends_on:
       aegis-capture:
         condition: service_healthy
