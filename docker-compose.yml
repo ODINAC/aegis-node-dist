@@ -1,8 +1,15 @@
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   aegis-capture:
     image: registry.0byt.es/aegis-capture:latest
     container_name: aegis-capture
     restart: always
+    logging: *default-logging
     environment:
       - TZ=Etc/UTC
     # Chromium's own sandbox needs user namespaces, which Docker's default seccomp blocks. 
@@ -21,6 +28,7 @@ services:
     image: registry.0byt.es/aegis-node:latest
     container_name: aegis-node
     restart: always
+    logging: *default-logging
     network_mode: host
     environment:
       - TZ=Etc/UTC
